@@ -320,7 +320,12 @@ public class SvgExe {
 				outputJar.closeEntry();
 			}
 			else{
-				addPackage(parent + "/" + directory.getName(), f);
+				if("".equals(parent)){
+					addPackage(directory.getName(), f);
+				}
+				else{
+					addPackage(parent + "/" + directory.getName(), f);
+				}
 			}
 		}
 	}
