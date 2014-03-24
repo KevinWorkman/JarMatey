@@ -76,11 +76,13 @@ public class SvgExeGui {
 	private boolean useCustomSplash = false;
 	private JTextField customSplashImageLocation = new JTextField();
 
-
-	public SvgExeGui(){
+	//TODO: if you know we're launched from the Processing PDE, customize the GUI to be more Processing friendly.
+	public SvgExeGui(boolean processing){
 
 		JFrame frame = new JFrame("SvgExe");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		if(!processing){
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		}
 
 		try{
 			List<Image> images = new ArrayList<Image>();
@@ -805,6 +807,8 @@ public class SvgExeGui {
 	}
 
 	public static void main(String... args){
+		
+		
 
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -817,7 +821,8 @@ public class SvgExeGui {
 		catch (Exception e) {
 			//no nimbus
 		}
-
-		new SvgExeGui();
+		
+		boolean processing = (args.length > 0 && Boolean.parseBoolean(args[0]));
+		new SvgExeGui(processing);
 	}
 }
