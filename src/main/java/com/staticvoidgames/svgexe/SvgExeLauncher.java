@@ -1,3 +1,5 @@
+//Modifications are marked with CHANGED, FIXED, and ADDED comments. Edited by Andrew Preston.
+
 package com.staticvoidgames.svgexe;
 
 import java.awt.SplashScreen;
@@ -30,11 +32,11 @@ public class SvgExeLauncher {
 	public static String containsNativesProperty = "containsNatives";
 	public static String containsExternalFilesProperty = "containsExternalFiles";
 
-	public static void main(String... unusedArgs) throws InterruptedException, IOException{
+	public static void main(String[] args) throws InterruptedException, IOException{ // CHANGED: Main method now accepts arguments, allowing the user to pass arguments to the main class within the self-extracting jar file.
 
 		File jarFile = new File(SvgExeLauncher.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 
-		String fullJarPath = jarFile.getAbsolutePath();
+		String fullJarPath = jarFile.getAbsolutePath().replaceAll("%20", " "); // CHANGED: Replaces "%20" with " " in the file path to allow for spaces in the file name.
 
 		Properties properties = new Properties();
 		properties.load(SvgExeLauncher.class.getClassLoader().getResourceAsStream("SvgExeProperties.p"));
@@ -98,9 +100,13 @@ public class SvgExeLauncher {
 		processArgs.add(classpathBuilder.toString());
 		processArgs.add(mainClass);
 		
-		if(properties.containsKey(SvgExeLauncher.jvmOptionsProperty)){
+		if(properties.containsKey(SvgExeLauncher.argsProperty)){ // FIXED: Copypasta error. Changed "SvgExeLauncher.jvmOptionsProperty" to "SvgExeLauncher.argsProperty".
 			String argsArray[] = properties.getProperty(SvgExeLauncher.argsProperty).split("\\s");
 			processArgs.addAll(Arrays.asList(argsArray));
+		}
+		
+		if(args.length>0){ // ADDED: If the user has passed in arguments, add them to processArgs.
+			processArgs.addAll(Arrays.asList(args));
 		}
 
 		
@@ -207,7 +213,6 @@ public class SvgExeLauncher {
 		String osArch = System.getProperty("os.arch");
 
 		Set<String> libraryPaths = new HashSet<String>();
-
 		JarFile jarFile = new JarFile(jar, false);
 
 		Enumeration<JarEntry> entities = jarFile.entries();
