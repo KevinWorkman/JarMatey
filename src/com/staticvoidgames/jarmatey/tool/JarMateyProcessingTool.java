@@ -1,4 +1,4 @@
-package com.staticvoidgames.svgexe.tool;
+package com.staticvoidgames.jarmatey.tool;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -15,18 +15,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.staticvoidgames.svgexe.gui.SvgExeGui;
+import com.staticvoidgames.jarmatey.gui.JarMateyGui;
 
 import processing.app.Editor;
 import processing.app.tools.Tool;
 
-public class SvgExeProcessingTool implements Tool{
+public class JarMateyProcessingTool implements Tool{
 	
 	Editor e;
 
 	@Override
 	public String getMenuTitle() {
-		return "SvgExe";
+		return "JarMatey";
 	}
 
 	@Override
@@ -36,14 +36,14 @@ public class SvgExeProcessingTool implements Tool{
 
 	@Override
 	public void run(){
-		SvgExeGui.main(new String[]{"true"});
+		JarMateyGui.main(new String[]{"true"});
 	}
 	
 	public void showProcessingInstructions() {
 		
 		JLabel label1 = new JLabel("<html><p><b>Step 1</b>: Select 'Export Application' from the 'File' menu. <br/>(if you haven't done that yet, cancel and go do that now)</p></html>");
-		JLabel label2 = new JLabel("<html><p><b>Step 2</b>: Specify the location of the application directory output as a result. <br/>SvgExe automagically populates itself.</p></html>");
-		JLabel label3 = new JLabel("<html><p><b>Step 3</b>: In the SvgExe window, specify an output jar and hit go to create your self-extracting jar!</p></html>");
+		JLabel label2 = new JLabel("<html><p><b>Step 2</b>: Specify the location of the application directory output as a result. <br/>JarMatey automagically populates itself.</p></html>");
+		JLabel label3 = new JLabel("<html><p><b>Step 3</b>: In the JarMatey window, specify an output jar and hit go to create your self-extracting jar!</p></html>");
 		
 		final JTextField applicationLocation = new JTextField();
 		applicationLocation.setMaximumSize(new Dimension(1000, 40));
@@ -84,15 +84,12 @@ public class SvgExeProcessingTool implements Tool{
 		panel.add(label3);
 		panel.add(textPanel);
 		
-		int choice = JOptionPane.showConfirmDialog(null, panel, "SvgExe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, new ImageIcon(SvgExeGui.class.getClassLoader().getResource("32.png")));
+		int choice = JOptionPane.showConfirmDialog(null, panel, "JarMatey", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, new ImageIcon(JarMateyGui.class.getClassLoader().getResource("32.png")));
 		
-		//TODO pass in the application folder to a method that goes through and populates SvgExe
+		//TODO pass in the application folder to a method that goes through and populates JarMatey
 		if(choice == JOptionPane.OK_OPTION){
-			SvgExeGui.main(new String[]{"true"});
+			JarMateyGui.main(new String[]{"true"});
 		}
-		
-		
-		
 		
 	}
 

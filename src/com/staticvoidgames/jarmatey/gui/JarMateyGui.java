@@ -1,4 +1,4 @@
-package com.staticvoidgames.svgexe.gui;
+package com.staticvoidgames.jarmatey.gui;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -38,18 +38,18 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import com.staticvoidgames.svgexe.SvgExe;
+import com.staticvoidgames.jarmatey.JarMatey;
 
 
 //TODO: comments
-public class SvgExeGui {
+public class JarMateyGui {
 
 	private String previousFile = "";
 
 	private JTextField mainClassTextField = new JTextField();
 	private JTextField versionTextField = new JTextField("1.0");
-	private JTextField nativesInJarDirectoryTextField = new JTextField("SvgExeNatives");
-	private JTextField externalFilesDirectoryTextField = new JTextField("SvgExeExternalFiles");
+	private JTextField nativesInJarDirectoryTextField = new JTextField("JarMateyNatives");
+	private JTextField externalFilesDirectoryTextField = new JTextField("JarMateyExternalFiles");
 	private JTextField argsTextField = new JTextField();
 	private JTextField jvmOptionsTextField = new JTextField();
 	private JCheckBox extractToTempDirCheckBox = new JCheckBox("Extract to temp directory", true);
@@ -77,17 +77,17 @@ public class SvgExeGui {
 	private JTextField customSplashImageLocation = new JTextField();
 
 	//TODO: if you know we're launched from the Processing PDE, customize the GUI to be more Processing friendly.
-	public SvgExeGui(boolean processing){
+	public JarMateyGui(boolean processing){
 
-		JFrame frame = new JFrame("SvgExe");
+		JFrame frame = new JFrame("JarMatey");
 		if(!processing){
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
 
 		try{
 			List<Image> images = new ArrayList<Image>();
-			images.add(new ImageIcon(SvgExeGui.class.getClassLoader().getResource("16.png")).getImage());
-			images.add(new ImageIcon(SvgExeGui.class.getClassLoader().getResource("32.png")).getImage());
+			images.add(new ImageIcon(JarMateyGui.class.getClassLoader().getResource("16.png")).getImage());
+			images.add(new ImageIcon(JarMateyGui.class.getClassLoader().getResource("32.png")).getImage());
 			frame.setIconImages(images);
 		}
 		catch(Exception e){
@@ -141,7 +141,7 @@ public class SvgExeGui {
 					sb.append("<h3>Natives</h3>");
 					sb.append("<p>Use this tab to add native libraries to your jar. These files will be automatically extracted to an external folder and your java.library.path will be set to that folder.</p>");
 					sb.append("<p>To add a file that will be extracted on every system your jar is run on, simply add it to the list here.</p>");
-					sb.append("<p>To target specific systems and extract only the correct natives for the user's system, you can use SvgExe's system detection feature by adding OS-specific folders.</p>");
+					sb.append("<p>To target specific systems and extract only the correct natives for the user's system, you can use JarMatey system detection feature by adding OS-specific folders.</p>");
 					sb.append("<p>For example, if you have native files for Windows, Linux, and Mac, do the following:</p>");
 					
 					sb.append("<ul><li>Create a directory named Windows, a directory named Linux, and a directory named Mac.</li>");
@@ -548,8 +548,8 @@ public class SvgExeGui {
 					try {
 						Desktop.getDesktop().browse(e.getURL().toURI());
 					}
-					catch (IOException | URISyntaxException e1) {
-						e1.printStackTrace();
+					catch (Exception ex) {
+						ex.printStackTrace();
 					}
 				}
 			}
@@ -640,7 +640,7 @@ public class SvgExeGui {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(new File(outputTextField.getText()).exists()){
-					int choice = JOptionPane.showConfirmDialog(okayButton, "Output file already exists. Overwrite?", "Overwrite file?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, new ImageIcon(SvgExeGui.class.getClassLoader().getResource("32.png")));
+					int choice = JOptionPane.showConfirmDialog(okayButton, "Output file already exists. Overwrite?", "Overwrite file?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, new ImageIcon(JarMateyGui.class.getClassLoader().getResource("32.png")));
 					if(choice == JOptionPane.CANCEL_OPTION){
 						return;
 					}
@@ -658,7 +658,7 @@ public class SvgExeGui {
 								public void run(){
 									progressBar.setVisible(false);
 									if(created){
-										JOptionPane.showMessageDialog(okayButton, "Your self-extracting jar was succesfully created!", "Success!", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(SvgExeGui.class.getClassLoader().getResource("32.png")));
+										JOptionPane.showMessageDialog(okayButton, "Your self-extracting jar was succesfully created!", "Success!", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(JarMateyGui.class.getClassLoader().getResource("32.png")));
 									}
 								}
 							});
@@ -741,11 +741,11 @@ public class SvgExeGui {
 
 	private boolean createOutputJar(String jarFile){
 
-		SvgExe svgExe = null;
+		JarMatey jarMatey = null;
 		
 		try {
 			setProgressOnEdt(0, "Creating self-extracting jar.");
-			svgExe = new SvgExe(jarFile, mainClassTextField.getText(), versionTextField.getText(), nativesInJarDirectoryTextField.getText(), externalFilesDirectoryTextField.getText(), showSplash, useCustomSplash, new File(customSplashImageLocation.getText()), extractToTempDirCheckBox.isSelected(), argsTextField.getText(), jvmOptionsTextField.getText(), !includedNatives.isEmpty(), !includedExternalFiles.isEmpty());
+			jarMatey = new JarMatey(jarFile, mainClassTextField.getText(), versionTextField.getText(), nativesInJarDirectoryTextField.getText(), externalFilesDirectoryTextField.getText(), showSplash, useCustomSplash, new File(customSplashImageLocation.getText()), extractToTempDirCheckBox.isSelected(), argsTextField.getText(), jvmOptionsTextField.getText(), !includedNatives.isEmpty(), !includedExternalFiles.isEmpty());
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -755,7 +755,7 @@ public class SvgExeGui {
 
 		try{
 			setProgressOnEdt(20, "Adding classes from you jars.");
-			svgExe.addFilesFromJars(includedJars);
+			jarMatey.addFilesFromJars(includedJars);
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -765,7 +765,7 @@ public class SvgExeGui {
 
 		try{
 			setProgressOnEdt(40, "Adding your classes.");
-			svgExe.addClasses(includedClasses);
+			jarMatey.addClasses(includedClasses);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -775,7 +775,7 @@ public class SvgExeGui {
 
 		try{
 			setProgressOnEdt(60, "Adding your natives.");
-			svgExe.addNatives(nativesInJarDirectoryTextField.getText(), includedNatives);
+			jarMatey.addNatives(nativesInJarDirectoryTextField.getText(), includedNatives);
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -785,7 +785,7 @@ public class SvgExeGui {
 
 		try{
 			setProgressOnEdt(80, "Adding your external files.");
-			svgExe.addExternalFiles(externalFilesDirectoryTextField.getText(), includedExternalFiles);
+			jarMatey.addExternalFiles(externalFilesDirectoryTextField.getText(), includedExternalFiles);
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -795,7 +795,7 @@ public class SvgExeGui {
 
 		try{
 			setProgressOnEdt(0, "Finalizing your self-extracting jar.");
-			svgExe.close();
+			jarMatey.close();
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -823,6 +823,6 @@ public class SvgExeGui {
 		}
 		
 		boolean processing = (args.length > 0 && Boolean.parseBoolean(args[0]));
-		new SvgExeGui(processing);
+		new JarMateyGui(processing);
 	}
 }

@@ -1,4 +1,4 @@
-package com.staticvoidgames.svgexe;
+package com.staticvoidgames.jarmatey;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -18,10 +18,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Core SvgExe class that does the work of creating a self-extracting jar.
+ * Core JarMatey class that does the work of creating a self-extracting jar.
  * @author Kevin
  */
-public class SvgExe {
+public class JarMatey {
 
 	/**
 	 * The self-extracting jar output file.
@@ -45,17 +45,17 @@ public class SvgExe {
 	List<String> alreadyAdded = new ArrayList<String>();
 
 	/**
-	 * Constructs a new SvgExe instance.
+	 * Constructs a new JarMatey instance.
 	 * TODO: stop taking all these constructor args and make more setter functions
 	 */
-	public SvgExe(String jarFile, String mainClass, String version, String nativesDirectory, String externalDirectory, boolean showSplash, boolean useCustomSplash, File customSplashFile, boolean extractToTempDir, String args, String jvmOptions, boolean willContainNatives, boolean willContainExternalFiles) throws Exception{
+	public JarMatey(String jarFile, String mainClass, String version, String nativesDirectory, String externalDirectory, boolean showSplash, boolean useCustomSplash, File customSplashFile, boolean extractToTempDir, String args, String jvmOptions, boolean willContainNatives, boolean willContainExternalFiles) throws Exception{
 
 		this.inJarNativesDirectory = nativesDirectory;
 		this.inJarExternalDirectory = externalDirectory;
 
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, version);
-		manifest.getMainAttributes().put(Attributes.Name.MAIN_CLASS, "com.staticvoidgames.svgexe.SvgExeLauncher");
+		manifest.getMainAttributes().put(Attributes.Name.MAIN_CLASS, "com.staticvoidgames.jarmatey.JarMateyLauncher");
 
 		//add splash to manifest
 		if(showSplash){
@@ -76,71 +76,71 @@ public class SvgExe {
 				addInternalFile(customSplashFile);
 			}
 			else{
-				addSvgExeFile("splash.png");
+				addJarMateyFile("splash.png");
 			}
 		}
 
-		addSvgExeFile("com/staticvoidgames/svgexe/SvgExeLauncher.class");
-		addSvgExeFile("com/staticvoidgames/svgexe/util/StreamGobbler.class");
+		addJarMateyFile("com/staticvoidgames/jarmatey/JarMateyLauncher.class");
+		addJarMateyFile("com/staticvoidgames/jarmatey/util/StreamGobbler.class");
 		
 		addPropertiesFile(mainClass, extractToTempDir, args, jvmOptions, willContainNatives, willContainExternalFiles);
 	}
 
 
 	/**
-	 * Adds the properties file that is read by the SvgExeLauncher.
+	 * Adds the properties file that is read by the JarMatey launcher.
 	 */
 	private void addPropertiesFile(String mainClass, boolean extractToTempDir, String args, String jvmOptions, boolean willContainNatives, boolean willContainExternalFiles) throws IOException{
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(SvgExeLauncher.mainClassProperty);
+		sb.append(JarMateyLauncher.mainClassProperty);
 		sb.append("=");
 		sb.append(mainClass);
 		sb.append("\n");
 
 		if(!"".equals(args)){
-			sb.append(SvgExeLauncher.argsProperty);
+			sb.append(JarMateyLauncher.argsProperty);
 			sb.append("=");
 			sb.append(args);
 			sb.append("\n");
 		}
 
 		if(!"".equals(jvmOptions)){
-			sb.append(SvgExeLauncher.jvmOptionsProperty);
+			sb.append(JarMateyLauncher.jvmOptionsProperty);
 			sb.append("=");
 			sb.append(jvmOptions);
 			sb.append("\n");
 		}
 
-		sb.append(SvgExeLauncher.extractToTempDirProperty);
+		sb.append(JarMateyLauncher.extractToTempDirProperty);
 		sb.append("=");
 		sb.append(extractToTempDir);
 		sb.append("\n");
 
-		sb.append(SvgExeLauncher.nativesInJarDirectoryProperty);
+		sb.append(JarMateyLauncher.nativesInJarDirectoryProperty);
 		sb.append("=");
 		sb.append(inJarNativesDirectory);
 		sb.append("\n");
 
-		sb.append(SvgExeLauncher.externalFilesInJarDirectoryProperty);
+		sb.append(JarMateyLauncher.externalFilesInJarDirectoryProperty);
 		sb.append("=");
 		sb.append(inJarExternalDirectory);
 		sb.append("\n");
 
-		sb.append(SvgExeLauncher.containsNativesProperty);
+		sb.append(JarMateyLauncher.containsNativesProperty);
 		sb.append("=");
 		sb.append(willContainNatives);
 		sb.append("\n");
 
-		sb.append(SvgExeLauncher.containsExternalFilesProperty);
+		sb.append(JarMateyLauncher.containsExternalFilesProperty);
 		sb.append("=");
 		sb.append(willContainExternalFiles);
 		sb.append("\n");
 
 		InputStream in = new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8));
 
-		outputJar.putNextEntry(new ZipEntry("SvgExeProperties.p"));
+		outputJar.putNextEntry(new ZipEntry("JarMateyProperties.p"));
 
 		int bufferSize;
 		byte[] buffer = new byte[4096];
@@ -154,11 +154,11 @@ public class SvgExe {
 	}
 
 	/**
-	 * Adds a file from the SvgExe jar (the one run by programmers) to the self-extracting jar (run by end-users).
+	 * Adds a file from the JarMatey jar (the one run by programmers) to the self-extracting jar (run by end-users).
 	 */
-	private void addSvgExeFile(String fileName) throws Exception{
+	private void addJarMateyFile(String fileName) throws Exception{
 
-		InputStream in = SvgExe.class.getClassLoader().getResourceAsStream(fileName);
+		InputStream in = JarMatey.class.getClassLoader().getResourceAsStream(fileName);
 
 		outputJar.putNextEntry(new ZipEntry(fileName));
 
@@ -260,7 +260,7 @@ public class SvgExe {
 				ZipEntry entry = (ZipEntry)entities.nextElement();
 
 				if (!alreadyAdded.contains(entry.getName()) && !entry.getName().toLowerCase().startsWith("meta-inf")){
-					//  if (!entry.getName().toLowerCase().contains("SvgExe")){
+					//  if (!entry.getName().toLowerCase().contains("JarMatey")){
 					InputStream in = jarFile.getInputStream(jarFile.getEntry(entry.getName()));
 
 					outputJar.putNextEntry(new ZipEntry(entry.getName()));

@@ -1,4 +1,4 @@
-package com.staticvoidgames.svgexe.util;
+package com.staticvoidgames.jarmatey.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

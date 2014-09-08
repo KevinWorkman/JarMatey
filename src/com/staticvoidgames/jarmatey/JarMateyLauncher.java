@@ -1,6 +1,6 @@
 //Modifications are marked with CHANGED, FIXED, and ADDED comments. Edited by Andrew Preston.
 
-package com.staticvoidgames.svgexe;
+package com.staticvoidgames.jarmatey;
 
 import java.awt.SplashScreen;
 import java.io.File;
@@ -19,9 +19,9 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.staticvoidgames.svgexe.util.StreamGobbler;
+import com.staticvoidgames.jarmatey.util.StreamGobbler;
 
-public class SvgExeLauncher {
+public class JarMateyLauncher {
 
 	public static String mainClassProperty = "mainClass";
 	public static String argsProperty = "args";
@@ -34,26 +34,26 @@ public class SvgExeLauncher {
 
 	public static void main(String[] args) throws InterruptedException, IOException{ // CHANGED: Main method now accepts arguments, allowing the user to pass arguments to the main class within the self-extracting jar file.
 
-		File jarFile = new File(SvgExeLauncher.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		File jarFile = new File(JarMateyLauncher.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 
 		String fullJarPath = jarFile.getAbsolutePath().replaceAll("%20", " "); // CHANGED: Replaces "%20" with " " in the file path to allow for spaces in the file name.
 
 		Properties properties = new Properties();
-		properties.load(SvgExeLauncher.class.getClassLoader().getResourceAsStream("SvgExeProperties.p"));
+		properties.load(JarMateyLauncher.class.getClassLoader().getResourceAsStream("JarMateyProperties.p"));
 
-		String nativesInJarDirectory =  properties.getProperty(SvgExeLauncher.nativesInJarDirectoryProperty);
-		String mainClass = properties.getProperty(SvgExeLauncher.mainClassProperty);
-		String externalFilesInJarDirectory = properties.getProperty(SvgExeLauncher.externalFilesInJarDirectoryProperty);
+		String nativesInJarDirectory =  properties.getProperty(JarMateyLauncher.nativesInJarDirectoryProperty);
+		String mainClass = properties.getProperty(JarMateyLauncher.mainClassProperty);
+		String externalFilesInJarDirectory = properties.getProperty(JarMateyLauncher.externalFilesInJarDirectoryProperty);
 
 	
 
 		
 
 
-		boolean containsNatives = Boolean.valueOf(properties.getProperty(SvgExeLauncher.containsNativesProperty));
-		boolean containsExternalFiles = Boolean.valueOf(properties.getProperty(SvgExeLauncher.containsExternalFilesProperty));
+		boolean containsNatives = Boolean.valueOf(properties.getProperty(JarMateyLauncher.containsNativesProperty));
+		boolean containsExternalFiles = Boolean.valueOf(properties.getProperty(JarMateyLauncher.containsExternalFilesProperty));
 
-		boolean extractToTempDir = Boolean.valueOf(properties.getProperty(SvgExeLauncher.extractToTempDirProperty));
+		boolean extractToTempDir = Boolean.valueOf(properties.getProperty(JarMateyLauncher.extractToTempDirProperty));
 
 
 
@@ -73,8 +73,8 @@ public class SvgExeLauncher {
 
 		List<String> processArgs = new ArrayList<String>();
 		processArgs.add("java");
-		if(properties.containsKey(SvgExeLauncher.jvmOptionsProperty)){
-			String jvmOptionsArray[] = properties.getProperty(SvgExeLauncher.jvmOptionsProperty).split("\\s");
+		if(properties.containsKey(JarMateyLauncher.jvmOptionsProperty)){
+			String jvmOptionsArray[] = properties.getProperty(JarMateyLauncher.jvmOptionsProperty).split("\\s");
 			processArgs.addAll(Arrays.asList(jvmOptionsArray));
 		}
 		
@@ -100,8 +100,8 @@ public class SvgExeLauncher {
 		processArgs.add(classpathBuilder.toString());
 		processArgs.add(mainClass);
 		
-		if(properties.containsKey(SvgExeLauncher.argsProperty)){ // FIXED: Copypasta error. Changed "SvgExeLauncher.jvmOptionsProperty" to "SvgExeLauncher.argsProperty".
-			String argsArray[] = properties.getProperty(SvgExeLauncher.argsProperty).split("\\s");
+		if(properties.containsKey(JarMateyLauncher.argsProperty)){ // FIXED: Copypasta error. Changed "JarMateyLauncher.jvmOptionsProperty" to "JarMateyLauncher.argsProperty".
+			String argsArray[] = properties.getProperty(JarMateyLauncher.argsProperty).split("\\s");
 			processArgs.addAll(Arrays.asList(argsArray));
 		}
 		
@@ -159,7 +159,7 @@ public class SvgExeLauncher {
 	}
 
 
-	public static String createAndReturnDir(boolean extractToTempDir, String svgExeDir){
+	public static String createAndReturnDir(boolean extractToTempDir, String jarMateyDir){
 
 		String parentDir = ".";
 
@@ -175,10 +175,10 @@ public class SvgExeLauncher {
 		}
 
 		int i = 0;
-		String fullNativeDir = parentDir + File.separator + svgExeDir + i;
+		String fullNativeDir = parentDir + File.separator + jarMateyDir + i;
 		while(new File(fullNativeDir).exists()){
 			i++;
-			fullNativeDir = parentDir + File.separator + svgExeDir + i;
+			fullNativeDir = parentDir + File.separator + jarMateyDir + i;
 		}
 
 		File dir = new File(fullNativeDir);

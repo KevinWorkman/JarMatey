@@ -1,6 +1,6 @@
-# SvgExe
+# JarMatey
 
-SvgExe is a program that builds self-extracting jars. These self-extracting jars can handle external
+JarMatey is a program that builds self-extracting jars. These self-extracting jars can handle external
         files and native resources.
 
 ## Building with Maven
@@ -17,8 +17,8 @@ Ensure [Maven](http://maven.apache.org) is installed on your system.
 
 3. Verify the project jar were created.
 
-    > \> ls target/svgexe*
+    > \> ls target/jarmatey*
 
-    > target/svgexe-{version}.jar
+    > target/jarmatey-{version}.jar
 
-4. All done! Now you can run `svgexe-{version}.jar`
+4. All done! Now you can run `jarmatey-{version}.jar`
